@@ -24,7 +24,10 @@ def get_all_links_from_music_grid(url_music_grid: str) -> Tuple[list[str], list[
     :return: Two lists that contain URL strings for each release (album/single/...) in the grid.
              First list contains latest 16 releases, second list contains everything else.
     """
-    urllib_request = urllib.request.Request(url_music_grid)
+    try:
+        urllib_request = urllib.request.Request(url_music_grid)
+    except ValueError as err:
+        return [repr(err)], []
 
     # Bandcamp returns 403 Forbidden if we don't have proper headers
     for header_key, header_value in __HEADERS.items():
