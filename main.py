@@ -3,12 +3,14 @@ import PySide6.QtWidgets as qtw
 from view.tab_about import TabAbout
 from view.tab_bandcamp16 import TabBandcamp16
 
+_VERSION = "0.0.0"
+
 
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Poor Listeners' Workbench")
+        self.setWindowTitle(f"Poor Listeners' Workbench  v{_VERSION}")
         self.setMinimumSize(1280, 720)
 
         tab_bandcamp16 = TabBandcamp16()

@@ -17,6 +17,8 @@ This tool, called _Bandcamp >16_, receives a URL to the artist's "music grid" as
 * Python 3
 * PySide 6&ensp;(LGPL)
 * Beautiful Soup 4&ensp;(MIT)
+* [h2non/jsonpath-ng](https://github.com/h2non/jsonpath-ng)&ensp;([Apache 2.0](https://github.com/h2non/jsonpath-ng/blob/master/LICENSE))
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp)&ensp;([Unlicense](https://github.com/yt-dlp/yt-dlp/blob/master/LICENSE))
 
 ## Law, Order, and Call to Action
 
