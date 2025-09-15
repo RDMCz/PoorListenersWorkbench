@@ -15,8 +15,8 @@ This tool, called _Bandcamp >16_, receives a URL to the artist's "music grid" as
 ## Dependencies
 
 * Python 3
-* PyQt 6
-* Beautiful Soup 4 (MIT)
+* PySide 6&ensp;(LGPL)
+* Beautiful Soup 4&ensp;(MIT)
 
 ## Law, Order, and Call to Action
 

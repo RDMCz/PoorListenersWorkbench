@@ -1,4 +1,4 @@
-import PyQt6.QtWidgets as qtw
+import PySide6.QtWidgets as qtw
 
 from view.tab_about import TabAbout
 from view.tab_bandcamp16 import TabBandcamp16

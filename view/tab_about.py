@@ -1,4 +1,4 @@
-import PyQt6.QtWidgets as qtw
+import PySide6.QtWidgets as qtw
 
 
 class TabAbout(qtw.QWidget):
