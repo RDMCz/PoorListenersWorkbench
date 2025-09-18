@@ -73,7 +73,7 @@ def __json_song_list_2_final_song_list(song_list: List[Any]) -> List[Dict]:
                 result_song["title"] = __get_nested_value_or_none(song_object, ["title", "runs", 0, "text"])
                 result_song["artist"] = __get_nested_value_or_none(song_object, ["shortBylineText", "runs", 0, "text"])
             result.append(result_song)
-            break
+            #break
     return result
 
 
@@ -105,7 +105,7 @@ def __download_final_song_list(songs: List[Dict]):
 
 
 def test():
-    with open("service/test2.html", "r", encoding="utf-8") as _f:
+    with open("service/test1.html", "r", encoding="utf-8") as _f:
         _kok = _f.read()
     _json_object_str = __html_2_yt_initial_data_str(_kok)
     _json_song_list = __yt_initial_data_str_2_json_song_list(_json_object_str)
