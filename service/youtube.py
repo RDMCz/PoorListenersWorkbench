@@ -66,14 +66,18 @@ def __json_song_list_2_final_song_list(song_list: List[Any]) -> List[Dict]:
     if song_list:
         for song in song_list:
             song_number += 1
-            result_song = {"number": song_number}
+            result_song = {
+                "number": str(song_number),
+                "albumartist": "",
+                "year": "",
+                "album": "",
+            }
             if "playlistVideoRenderer" in song:
                 song_object = song["playlistVideoRenderer"]
                 result_song["id"] = __get_nested_value_or_none(song_object, ["videoId"])
                 result_song["title"] = __get_nested_value_or_none(song_object, ["title", "runs", 0, "text"])
                 result_song["artist"] = __get_nested_value_or_none(song_object, ["shortBylineText", "runs", 0, "text"])
             result.append(result_song)
-            #break
     return result
 
 
@@ -83,7 +87,7 @@ def __download_final_song_list(songs: List[Dict]):
         if song["id"]:
             yt_opts = {
                 "format": "bestaudio/best",
-                "outtmpl": f"{song["number"]} - {song["artist"]} - {song["title"]}.%(ext)s",
+                "outtmpl": f"download/{song["number"].zfill(2)} - {song["artist"]} - {song["title"]}.%(ext)s",
                 "postprocessors": [
                     {"key": "FFmpegExtractAudio", "preferredcodec": "mp3"},
                     {"key": "FFmpegMetadata", "add_metadata": True}
@@ -91,11 +95,11 @@ def __download_final_song_list(songs: List[Dict]):
                 "postprocessor_args": {
                     "ffmpeg": [
                         "-metadata", f"artist={song["artist"]}",
-                        "-metadata", f"albumartist={song["artist"]}",
+                        "-metadata", f"albumartist={song["albumartist"]}",
                         "-metadata", f"title={song["title"]}",
                         "-metadata", f"track={song["number"]}",
-                        "-metadata", "album=album",
-                        "-metadata", "year=0",
+                        "-metadata", f"album={song["album"]}",
+                        "-metadata", f"year={song["year"]}",
                         "-metadata", f"comment={song["id"]}",
                     ]
                 }
@@ -104,24 +108,18 @@ def __download_final_song_list(songs: List[Dict]):
             ydl.download(base_link + song["id"])
 
 
-def test():
-    with open("service/test1.html", "r", encoding="utf-8") as _f:
-        _kok = _f.read()
-    _json_object_str = __html_2_yt_initial_data_str(_kok)
-    _json_song_list = __yt_initial_data_str_2_json_song_list(_json_object_str)
-    _final_song_list = __json_song_list_2_final_song_list(_json_song_list)
-    return _final_song_list
+def get_song_list_from_youtube_playlist_url(url: str):
+    html = __playlist_url_2_html(url)
+    json_object_str = __html_2_yt_initial_data_str(html)
+    json_song_list = __yt_initial_data_str_2_json_song_list(json_object_str)
+    final_song_list_before_user_edit = __json_song_list_2_final_song_list(json_song_list)
+    return final_song_list_before_user_edit
+
+
+def download_song_list(songs: List[Dict]):
+    __download_final_song_list(songs)
 
 
 # For testing/debug:
 if __name__ == "__main__":
-    with open("test2.html", "r", encoding="utf-8") as f:
-        kok = f.read()
-
-    json_object_str = __html_2_yt_initial_data_str(kok)
-
-    json_song_list = __yt_initial_data_str_2_json_song_list(json_object_str)
-
-    final_song_list = __json_song_list_2_final_song_list(json_song_list)
-
-    __download_final_song_list(final_song_list)
+    pass

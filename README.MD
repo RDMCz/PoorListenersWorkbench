@@ -4,6 +4,8 @@
 
 Yeah...
 
+<img alt="screenshot" src="./screenshot.jpg" width="700" />
+
 ## Features
 
 ### _Bandcamp >16_
@@ -12,9 +14,16 @@ Otiel's [_BandcampDownloader_](https://github.com/Otiel/BandcampDownloader/) cur
 
 This tool, called _Bandcamp >16_, receives a URL to the artist's "music grid" as input and outputs a list of all URLs for the artist's individual albums. You then just need to copy these URLs into _BandcampDownloader_ (and untick the "Download artist discography" option).
 
+### YTPLDL
+
+Downloads mp3 files for given YouTube playlist URL. ID3v2 tags can be modified in the UI.
+
+__FFmpeg is required for this to function[.](https://phoenixnap.com/kb/ffmpeg-windows)__
+
 ## Dependencies
 
 * Python 3
+* FFmpeg
 * PySide 6&ensp;(LGPL)
 * Beautiful Soup 4&ensp;(MIT)
 * [h2non/jsonpath-ng](https://github.com/h2non/jsonpath-ng)&ensp;([Apache 2.0](https://github.com/h2non/jsonpath-ng/blob/master/LICENSE))
