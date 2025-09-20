@@ -104,9 +104,9 @@ class TabYTPLDL(qtw.QWidget):
                 self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[audio_tag],
                                       qtw.QTableWidgetItem(str(song[audio_tag])))
                 # e.g.:
-            # self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.NUMBER],
-            #                      qtw.QTableWidgetItem(str(song[AudioTag.NUMBER])))
-            # foreach tag
+                # self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.NUMBER],
+                #                      qtw.QTableWidgetItem(str(song[AudioTag.NUMBER])))
+                # foreach tag
 
             row_number += 1
 
@@ -133,9 +133,9 @@ class TabYTPLDL(qtw.QWidget):
             song = {}
             for audio_tag in AudioTag:
                 song[audio_tag] = self.g2_table.item(row_number, AUDIOTAG_TO_COLNUM[audio_tag]).text()
-            # e.g.:
-            # AudioTag.ID: self.g2_table.item(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ID]).text()
-            # foreach tag
+                # e.g.:
+                # AudioTag.ID: self.g2_table.item(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ID]).text()
+                # foreach tag
 
             final_songs.append(song)
         yt.download_song_list(final_songs)
