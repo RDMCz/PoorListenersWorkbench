@@ -23,6 +23,8 @@ class MainWindow(qtw.QMainWindow):
         tabs.addTab(tab_ytpldl, "YTPLDL")
         tabs.addTab(tab_about, "About...")
 
+        # TabWidget could be directly set as central widget, but putting it in a
+        # VBoxLayout first creates adequate looking border around the TabWidget
         main_layout = qtw.QVBoxLayout()
         main_layout.addWidget(tabs)
         container = qtw.QWidget()

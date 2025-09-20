@@ -13,7 +13,7 @@ class TabYTPLDL(qtw.QWidget):
         # .: Group 1 :: YouTube playlist URL :.
         group1 = qtw.QGroupBox("Step 1: Provide a YouTube playlist URL")
         group1layout = qtw.QHBoxLayout()
-        # URL input
+        # YouTube playlist URL input
         self.g1_input = qtw.QLineEdit()
         self.g1_input.setPlaceholderText("YouTube playlist URL")
         group1layout.addWidget(self.g1_input)
@@ -70,6 +70,7 @@ class TabYTPLDL(qtw.QWidget):
         self.setLayout(stack_panel)
 
     def button_g1_clicked(self):
+        """Fetch songs from YouTube playlist URL and put data into the table."""
         result = yt.get_song_list_from_youtube_playlist_url(self.g1_input.text())
 
         self.g2_table.reset()
@@ -96,6 +97,7 @@ class TabYTPLDL(qtw.QWidget):
             row_number += 1
 
     def button_g2_clicked(self):
+        """Apply certain tag edits to all songs (rows)."""
         new_artist = self.g2_global_artist_input.text()
         new_album_artist = self.g2_global_album_artist_input.text()
         new_year = self.g2_global_year_input.text()
@@ -107,6 +109,7 @@ class TabYTPLDL(qtw.QWidget):
             self.g2_table.setItem(row_number, 6, qtw.QTableWidgetItem(new_album))
 
     def button_g3_clicked(self):
+        """Download songs and them according to the table values."""
         final_songs = []
         for row_number in range(self.g2_table.rowCount()):
             song = {

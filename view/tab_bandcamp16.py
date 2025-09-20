@@ -8,18 +8,22 @@ class TabBandcamp16(qtw.QWidget):
     def __init__(self):
         super().__init__()
 
+        # .: Input :: Bandcamp artist's music grid URL :.
         self.input_link = qtw.QLineEdit()
         self.input_link.setPlaceholderText("Bandcamp music grid URL")
 
+        # .: Output1 :: URLs to latest 16 albums :.
         self.input_result1 = qtw.QTextEdit()
         self.input_result1.setReadOnly(True)
         # self.input_result1.setMinimumHeight(self.input_result1.fontMetrics().lineSpacing() * 16)
         self.input_result1.setWordWrapMode(qtg.QTextOption.WrapMode.NoWrap)
 
+        # .: Output2 :: URLS to albums from no.17 onwards :.
         self.input_result2 = qtw.QTextEdit()
         self.input_result2.setReadOnly(True)
         self.input_result2.setWordWrapMode(qtg.QTextOption.WrapMode.NoWrap)
 
+        # .: Button ☺ :.
         self.button_run = qtw.QPushButton("Run")
         self.button_run.clicked.connect(self.button_run_clicked)
 

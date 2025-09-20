@@ -16,7 +16,7 @@ This tool, called _Bandcamp >16_, receives a URL to the artist's "music grid" as
 
 ### YTPLDL
 
-Downloads mp3 files for given YouTube playlist URL. ID3v2 tags can be modified in the UI.
+Downloads MP3 files for given YouTube playlist URL. ID3v2 tags can be modified in the UI.
 
 __FFmpeg is required for this to function[.](https://phoenixnap.com/kb/ffmpeg-windows)__
 
@@ -50,4 +50,4 @@ There is a certain charm in maintaining your own offline music library. It comes
 
 You could certainly compile a similar list of advantages of music streaming platforms or disadvantages of offline audio libraries. Just keep in mind that this option exists. Then there is also this somewhat darker problem with streaming services and music distributors: how they treat genuine independent artists while letting all kinds of scams and a flood of AI music slip through their fingers. There are many discussions on this issue. If you are interested, I think this video sums it up nicely: [It's Not Just You: Music Streaming Is Broken Now](https://youtu.be/plleJ0Zv0Ww) by Venus Theory.
 
-The time is now! Become your own master! (At least when it comes to listening to music.)
+Maybe the time is now to become your own master! (At least when it comes to listening to music.)
