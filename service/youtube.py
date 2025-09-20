@@ -6,12 +6,14 @@ import jsonpath_ng
 import yt_dlp
 from bs4 import BeautifulSoup
 
+from constant.audiotag_strenum import AudioTag
 
-def __get_nested_value_or_none(where: Any, what: List[str]) -> Optional[Any]:
+
+def __get_nested_value_or_empty_string(where: Any, what: List[str]) -> Optional[Any]:
     """
     :param where: Structure of nested lists and dictionaries, likely from json.loads
     :param what: Path to nested value: list where int means list index and string means dict key
-    :return: Requested value if path `what` is valid in structure `where`, else None
+    :return: Requested value if path `what` is valid in structure `where`, else empty string ""
     """
     current_node = where
     for key in what:
@@ -20,9 +22,9 @@ def __get_nested_value_or_none(where: Any, what: List[str]) -> Optional[Any]:
         elif isinstance(current_node, list) and isinstance(key, int) and 0 <= key < len(current_node):
             current_node = current_node[key]
         else:
-            return None
+            return ""
         if not current_node:
-            return None
+            return ""
     return current_node
 
 
@@ -77,7 +79,7 @@ def __yt_initial_data_str_2_json_song_list(yt_initial_data_str: str) -> Optional
     return None
 
 
-def __json_song_list_2_final_song_list_before_user_edit(song_list: List[Any]) -> List[Dict]:
+def __json_song_list_2_final_song_list_before_user_edit(song_list: List[Any]) -> List[Dict[AudioTag, str]]:
     """Returns list of songs with only the information we need in the UI
     (YT video ID, track number, title, artist, album artist, year, album)
     for given 'playlistVideoListRenderer.contents'."""
@@ -91,51 +93,56 @@ def __json_song_list_2_final_song_list_before_user_edit(song_list: List[Any]) ->
         for song in song_list:
             song_number += 1
             result_song = {
-                "number": str(song_number),
-                # We'll try to find these in JSON soon but initialize them in case we don't find them
-                "id": "",
-                "title": "",
-                "artist": "",
+                AudioTag.NUMBER: str(song_number),
                 # Leave these blank for now and user can change it later in the UI
-                "albumartist": "",
-                "year": "",
-                "album": "",
+                AudioTag.ALBUMARTIST: "",
+                AudioTag.YEAR: "",
+                AudioTag.ALBUM: "",
+                # We'll try to find id, title and artist in JSON:
             }
             if "playlistVideoRenderer" in song:
                 song_object = song["playlistVideoRenderer"]
-                result_song["id"] = __get_nested_value_or_none(song_object, ["videoId"])
-                result_song["title"] = __get_nested_value_or_none(song_object, ["title", "runs", 0, "text"])
-                result_song["artist"] = __get_nested_value_or_none(song_object, ["shortBylineText", "runs", 0, "text"])
+
+                result_song[AudioTag.ID] = (
+                    __get_nested_value_or_empty_string(song_object, ["videoId"])
+                )
+                result_song[AudioTag.TITLE] = (
+                    __get_nested_value_or_empty_string(song_object, ["title", "runs", 0, "text"])
+                )
+                result_song[AudioTag.ARTIST] = (
+                    __get_nested_value_or_empty_string(song_object, ["shortBylineText", "runs", 0, "text"])
+                )
+
             result.append(result_song)
     return result
 
 
-def __download_final_song_list(songs: List[Dict]):
+def __download_final_song_list(songs: List[Dict[AudioTag, str]]):
     """Uses yt-dlp and FFmpeg to download and tag songs from given list."""
     base_link = "https://www.youtube.com/watch?v="
     for song in songs:
-        if song["id"]:
+        if song[AudioTag.ID]:
             yt_opts = {
                 "format": "bestaudio/best",
-                "outtmpl": f"download/{song["number"].zfill(2)} - {song["artist"]} - {song["title"]}.%(ext)s",
+                "outtmpl": f"_download/{song[AudioTag.NUMBER].zfill(2)} - {song[AudioTag.ARTIST]} - {song[AudioTag.TITLE]}.%(ext)s",
                 "postprocessors": [
                     {"key": "FFmpegExtractAudio", "preferredcodec": "mp3"},
                     {"key": "FFmpegMetadata", "add_metadata": True}
                 ],
                 "postprocessor_args": {
                     "ffmpeg": [
-                        "-metadata", f"artist={song["artist"]}",
-                        "-metadata", f"albumartist={song["albumartist"]}",
-                        "-metadata", f"title={song["title"]}",
-                        "-metadata", f"track={song["number"]}",
-                        "-metadata", f"album={song["album"]}",
-                        "-metadata", f"year={song["year"]}",
-                        "-metadata", f"comment={song["id"]}",
+                        "-metadata", f"artist={song[AudioTag.ARTIST]}",
+                        "-metadata", f"albumartist={song[AudioTag.ALBUMARTIST]}",
+                        "-metadata", f"title={song[AudioTag.TITLE]}",
+                        "-metadata", f"track={song[AudioTag.NUMBER]}",
+                        "-metadata", f"album={song[AudioTag.ALBUM]}",
+                        "-metadata", f"year={song[AudioTag.YEAR]}",
+                        "-metadata", f"comment={song[AudioTag.ID]}",
                     ]
                 }
             }
             ydl = yt_dlp.YoutubeDL(yt_opts)
-            ydl.download(base_link + song["id"])
+            ydl.download(base_link + song[AudioTag.ID])
 
 
 def get_song_list_from_youtube_playlist_url(url: str):
@@ -147,7 +154,7 @@ def get_song_list_from_youtube_playlist_url(url: str):
     return final_song_list_before_user_edit
 
 
-def download_song_list(songs: List[Dict]):
+def download_song_list(songs: List[Dict[AudioTag, str]]):
     """Downloads and tags songs from given list."""
     __download_final_song_list(songs)
 

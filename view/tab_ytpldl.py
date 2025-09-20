@@ -1,7 +1,20 @@
+from typing import Dict, List
+
 import PySide6.QtCore as qtc
 import PySide6.QtWidgets as qtw
 
 import service.youtube as yt
+from constant.audiotag_strenum import AudioTag
+
+AUDIOTAG_TO_COLNUM = {
+    AudioTag.ID: 0,
+    AudioTag.NUMBER: 1,
+    AudioTag.TITLE: 2,
+    AudioTag.ARTIST: 3,
+    AudioTag.ALBUMARTIST: 4,
+    AudioTag.YEAR: 5,
+    AudioTag.ALBUM: 6,
+}
 
 
 class TabYTPLDL(qtw.QWidget):
@@ -71,7 +84,7 @@ class TabYTPLDL(qtw.QWidget):
 
     def button_g1_clicked(self):
         """Fetch songs from YouTube playlist URL and put data into the table."""
-        result = yt.get_song_list_from_youtube_playlist_url(self.g1_input.text())
+        result: List[Dict[AudioTag, str]] = yt.get_song_list_from_youtube_playlist_url(self.g1_input.text())
 
         self.g2_table.reset()
         self.g2_table.setRowCount(len(result))
@@ -83,16 +96,17 @@ class TabYTPLDL(qtw.QWidget):
 
         row_number = 0
         for song in result:
-            item_id = qtw.QTableWidgetItem(str(song["id"]))
+            item_id = qtw.QTableWidgetItem(str(song[AudioTag.ID]))
             item_id.setFlags(qtc.Qt.ItemFlag.NoItemFlags)
-            self.g2_table.setItem(row_number, 0, item_id)
+            self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ID], item_id)
 
-            self.g2_table.setItem(row_number, 1, qtw.QTableWidgetItem(str(song["number"])))
-            self.g2_table.setItem(row_number, 2, qtw.QTableWidgetItem(str(song["title"])))
-            self.g2_table.setItem(row_number, 3, qtw.QTableWidgetItem(str(song["artist"])))
-            self.g2_table.setItem(row_number, 4, qtw.QTableWidgetItem(str(song["albumartist"])))
-            self.g2_table.setItem(row_number, 5, qtw.QTableWidgetItem(str(song["year"])))
-            self.g2_table.setItem(row_number, 6, qtw.QTableWidgetItem(str(song["album"])))
+            for audio_tag in AudioTag:
+                self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[audio_tag],
+                                      qtw.QTableWidgetItem(str(song[audio_tag])))
+                # e.g.:
+            # self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.NUMBER],
+            #                      qtw.QTableWidgetItem(str(song[AudioTag.NUMBER])))
+            # foreach tag
 
             row_number += 1
 
@@ -103,24 +117,26 @@ class TabYTPLDL(qtw.QWidget):
         new_year = self.g2_global_year_input.text()
         new_album = self.g2_global_album_input.text()
         for row_number in range(self.g2_table.rowCount()):
-            self.g2_table.setItem(row_number, 3, qtw.QTableWidgetItem(new_artist))
-            self.g2_table.setItem(row_number, 4, qtw.QTableWidgetItem(new_album_artist))
-            self.g2_table.setItem(row_number, 5, qtw.QTableWidgetItem(new_year))
-            self.g2_table.setItem(row_number, 6, qtw.QTableWidgetItem(new_album))
+            self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ARTIST], qtw.QTableWidgetItem(new_artist))
+
+            self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ALBUMARTIST],
+                                  qtw.QTableWidgetItem(new_album_artist))
+
+            self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.YEAR], qtw.QTableWidgetItem(new_year))
+
+            self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ALBUM], qtw.QTableWidgetItem(new_album))
 
     def button_g3_clicked(self):
         """Download songs and them according to the table values."""
-        final_songs = []
+        final_songs: List[Dict[AudioTag, str]] = []
         for row_number in range(self.g2_table.rowCount()):
-            song = {
-                "id": self.g2_table.item(row_number, 0).text(),
-                "number": self.g2_table.item(row_number, 1).text(),
-                "title": self.g2_table.item(row_number, 2).text(),
-                "artist": self.g2_table.item(row_number, 3).text(),
-                "albumartist": self.g2_table.item(row_number, 4).text(),
-                "year": self.g2_table.item(row_number, 5).text(),
-                "album": self.g2_table.item(row_number, 6).text(),
-            }
+            song = {}
+            for audio_tag in AudioTag:
+                song[audio_tag] = self.g2_table.item(row_number, AUDIOTAG_TO_COLNUM[audio_tag]).text()
+            # e.g.:
+            # AudioTag.ID: self.g2_table.item(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ID]).text()
+            # foreach tag
+
             final_songs.append(song)
         yt.download_song_list(final_songs)
         print("Done")
