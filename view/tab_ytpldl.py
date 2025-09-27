@@ -1,19 +1,21 @@
 from typing import Dict, List
 
 import PySide6.QtCore as qtc
+import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 
 import service.youtube as yt
 from constant.audiotag_strenum import AudioTag
 
 AUDIOTAG_TO_COLNUM = {
-    AudioTag.ID: 0,
-    AudioTag.NUMBER: 1,
-    AudioTag.TITLE: 2,
-    AudioTag.ARTIST: 3,
-    AudioTag.ALBUMARTIST: 4,
-    AudioTag.YEAR: 5,
-    AudioTag.ALBUM: 6,
+    # Column 0 reserved for index ("#")
+    AudioTag.ID: 1,
+    AudioTag.NUMBER: 2,
+    AudioTag.TITLE: 3,
+    AudioTag.ARTIST: 4,
+    AudioTag.ALBUMARTIST: 5,
+    AudioTag.YEAR: 6,
+    AudioTag.ALBUM: 7,
 }
 
 
@@ -69,7 +71,19 @@ class TabYTPLDL(qtw.QWidget):
 
         # .: Group 3 :: Download and convert :.
         group3 = qtw.QGroupBox("Step 3: Download and convert")
-        group3layout = qtw.QHBoxLayout()
+        group3layout = qtw.QVBoxLayout()
+        # - hbox where you can set start index
+        g3_start_innerlayout = qtw.QHBoxLayout()
+        g3_start_label = qtw.QLabel("Start from index: ")
+        g3_start_innerlayout.addWidget(g3_start_label)
+        self.g3_start_input = qtw.QLineEdit()
+        validator = qtg.QIntValidator(0, 999)
+        self.g3_start_input.setValidator(validator)
+        self.g3_start_input.setFixedWidth(30)
+        g3_start_innerlayout.addWidget(self.g3_start_input)
+        g3_start_innerlayout.addStretch()  # Adds a "stretch space" to the end so label and input are right next to each other (no big gap between them)
+        group3layout.addLayout(g3_start_innerlayout)
+        # - button to download
         g3_button = qtw.QPushButton("Download and convert")
         g3_button.clicked.connect(self.button_g3_clicked)
         group3layout.addWidget(g3_button)
@@ -88,27 +102,33 @@ class TabYTPLDL(qtw.QWidget):
 
         self.g2_table.reset()
         self.g2_table.setRowCount(len(result))
-        horizontal_header_labels = ["YT code", "Track number", "Title", "Artist", "Album artist", "Year", "Album"]
+        horizontal_header_labels = ["#", "YT code", "Track number", "Title", "Artist", "Album artist", "Year", "Album"]
         self.g2_table.setColumnCount(len(horizontal_header_labels))
         self.g2_table.setHorizontalHeaderLabels(horizontal_header_labels)
         self.g2_table.horizontalHeader().setSectionResizeMode(qtw.QHeaderView.ResizeMode.ResizeToContents)
         self.g2_table.verticalHeader().hide()
+        self.g3_start_input.setText("0")
 
-        row_number = 0
-        for song in result:
+        for row_number, song in enumerate(result):
+            # ("#")
+            item_id = qtw.QTableWidgetItem(str(row_number))
+            item_id.setFlags(qtc.Qt.ItemFlag.NoItemFlags)
+            self.g2_table.setItem(row_number, 0, item_id)
+
+            # ("YT code")
             item_id = qtw.QTableWidgetItem(str(song[AudioTag.ID]))
             item_id.setFlags(qtc.Qt.ItemFlag.NoItemFlags)
             self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.ID], item_id)
 
+            # ("Track number", "Title", "Artist", "Album artist", "Year", "Album")
             for audio_tag in AudioTag:
-                self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[audio_tag],
-                                      qtw.QTableWidgetItem(str(song[audio_tag])))
-                # e.g.:
-                # self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.NUMBER],
-                #                      qtw.QTableWidgetItem(str(song[AudioTag.NUMBER])))
-                # foreach tag
-
-            row_number += 1
+                if audio_tag != AudioTag.ID:
+                    self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[audio_tag],
+                                          qtw.QTableWidgetItem(str(song[audio_tag])))
+                    # e.g.:
+                    # self.g2_table.setItem(row_number, AUDIOTAG_TO_COLNUM[AudioTag.NUMBER],
+                    #                      qtw.QTableWidgetItem(str(song[AudioTag.NUMBER])))
+                    # foreach tag
 
     def button_g2_clicked(self):
         """Apply certain tag edits to all songs (rows)."""
@@ -138,5 +158,10 @@ class TabYTPLDL(qtw.QWidget):
                 # foreach tag
 
             final_songs.append(song)
-        yt.download_song_list(final_songs)
+
+        start_index = 0
+        if self.g3_start_input.text().isnumeric():
+            start_index = int(self.g3_start_input.text())
+
+        yt.download_song_list(final_songs, start_index)
         print("Done")

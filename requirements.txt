@@ -1,4 +1,4 @@
 beautifulsoup4~=4.13.5
 PySide6~=6.9.2
 jsonpath-ng~=1.7.0
-yt-dlp~=2025.9.5
+yt-dlp~=2025.9.26

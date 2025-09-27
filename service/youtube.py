@@ -154,9 +154,15 @@ def get_song_list_from_youtube_playlist_url(url: str):
     return final_song_list_before_user_edit
 
 
-def download_song_list(songs: List[Dict[AudioTag, str]]):
-    """Downloads and tags songs from given list."""
-    __download_final_song_list(songs)
+def download_song_list(songs: List[Dict[AudioTag, str]], start_index: int):
+    """Downloads and tags songs from given list. Starts at song with index `start_index`."""
+    if start_index <= 0:
+        __download_final_song_list(songs)
+    else:
+        if start_index < len(songs):
+            __download_final_song_list(songs[start_index:])
+        else:
+            print("Index out of range")
 
 
 # For testing/debug:
