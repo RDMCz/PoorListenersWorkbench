@@ -60,6 +60,10 @@ Maybe the time is now to become your own master! (At least when it comes to list
 
 ## Changelog
 
+### 0.1.0
+
+* YTPLDL: The index of the first song to be downloaded can now be specified. This is useful for resuming a previously interrupted download.
+
 ### 0.0.1
 
 * Initial release
