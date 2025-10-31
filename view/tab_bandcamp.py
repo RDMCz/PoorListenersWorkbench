@@ -30,7 +30,7 @@ class TabBandcamp(qtw.QWidget):
         group2layout.addWidget(self.album_table)
 
         group2.setLayout(group2layout)
-        # .: :.
+        # .::.
 
         # .: Group 3 :: Download button :.
         group3 = qtw.QGroupBox("Step 3: Start downloading")
@@ -41,7 +41,7 @@ class TabBandcamp(qtw.QWidget):
         group3layout.addWidget(g3_button)
 
         group3.setLayout(group3layout)
-        # .: :
+        # .::.
 
         stack_panel = qtw.QVBoxLayout()
         stack_panel.addWidget(group1)

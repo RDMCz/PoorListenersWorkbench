@@ -19,7 +19,7 @@ In its current state, this app is a simple GUI wrapper around `yt-dlp` that allo
 
 Lets you choose which albums to download in MP3 for given Bandcamp artist's "music grid" URL.
 
-Otiel's [_BandcampDownloader_](https://github.com/Otiel/BandcampDownloader/) is more ergonomic and has more options, so I recommend using that instead. However, at the time of writing, Otiel's BandcampDownloader is not working, so this is a good fallback option.
+Otiel's [_BandcampDownloader_](https://github.com/Otiel/BandcampDownloader/) is more ergonomic and has more options, so I recommend using that instead. However, at the time of writing, Otiel's _BandcampDownloader_ is not working, so this is a good fallback option.
 
 ### YTPLDL – YouTube playlist DL
 
@@ -35,15 +35,15 @@ Downloads MP3 files for given YouTube playlist URL. ID3v2 tags can be modified i
      * After that, you can run the app by double clicking `main.py`
    * Option B – install dependencies in virtual environment:
      * Run the app by right clicking `Run-In-Venv.ps1` and choosing _Run with PowerShell_
-     * First boot will be slow, because it will install all the dependencies
+     * The first boot will be slow because it installs all the dependencies
 
-If the downloading from YouTube (or other sites) stops working, first thing to try is updating the `yt-dlp` package:
+If downloading from YouTube (or other sites) stops working, first thing to try is updating the `yt-dlp` package:
 
 ```ps1
-# Run this line in the root folder of this project only if you chose Option B:
+# Run this line first in the root folder of this project only if you chose Option B (virtual environment):
 .venv\Scripts\activate
 
-# Running this line will update the yt-dlp package
+# Running this line will update the yt-dlp package:
 pip install -U yt-dlp
 ```
 
@@ -80,6 +80,10 @@ You could certainly compile a similar list of advantages of music streaming plat
 Maybe the time is now to become your own master! (At least when it comes to listening to music.)
 
 ## Changelog
+
+### 0.2.0
+
+* _Bandcamp DL_ feature was added
 
 ### 0.1.0
 
