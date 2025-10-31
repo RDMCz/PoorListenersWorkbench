@@ -1,28 +1,49 @@
 # Poor Listeners' Workbench
 
+* [What is this?](#what-is-this)
+* [Features](#features)
+* [Running on Windows](#running-on-windows)
+* [Dependencies](#dependencies)
+* [Law, Order, and Call to Action](#law-order-and-call-to-action)
+* [Changelog](#changelog)
+
 ## What is this?
 
-Yeah...
+In its current state, this app is a simple GUI wrapper around `yt-dlp` that allows you to download MP3s from Bandcamp and YouTube playlists.
 
 <img alt="screenshot" src="./screenshot.jpg" width="700" />
 
 ## Features
 
-### _Bandcamp >16_
+### Bandcamp DL
 
-Otiel's [_BandcampDownloader_](https://github.com/Otiel/BandcampDownloader/) currently contains a bug that causes only the 16 most recent albums to be downloaded when you try to download an artist's entire discography. Since no one (myself included) has yet found the time and courage to fix the bug, I have created a simple tool to work around it. To download the complete discography, the first 16 albums can be downloaded as described above, and the rest must be entered into _BandcampDownloader_ one URL for each album. Rewriting these URLs can be tedious, especially if there are a lot of them.
+Lets you choose which albums to download in MP3 for given Bandcamp artist's "music grid" URL.
 
-This tool, called _Bandcamp >16_, receives a URL to the artist's "music grid" as input and outputs a list of all URLs for the artist's individual albums. You then just need to copy these URLs into _BandcampDownloader_ (and untick the "Download artist discography" option).
+Otiel's [_BandcampDownloader_](https://github.com/Otiel/BandcampDownloader/) is more ergonomic and has more options, so I recommend using that instead. However, at the time of writing, Otiel's BandcampDownloader is not working, so this is a good fallback option.
 
-### YTPLDL
+### YTPLDL – YouTube playlist DL
 
 Downloads MP3 files for given YouTube playlist URL. ID3v2 tags can be modified in the UI.
 
-__FFmpeg is required for this to function[.](https://phoenixnap.com/kb/ffmpeg-windows)__
+## Running on Windows
+
+1. Install Python 3 – [Download Python @ python.org](https://www.python.org/downloads/)
+2. Install FFmpeg – [Installing FFmpeg on Windows {Step-by-Step} @ phoenixnap.com](https://phoenixnap.com/kb/ffmpeg-windows)
+3. Install dependencies and run the app:
+   * Option A – install dependencies globally:
+     * Open command line in the root folder of this project and run `pip install -r requirements.txt`
+     * After that, you can run the app by double clicking `main.py`
+   * Option B – install dependencies in virtual environment:
+     * Run the app by right clicking `Run-In-Venv.ps1` and choosing _Run with PowerShell_
+     * First boot will be slow, because it will install all the dependencies
+
+If the downloading from YouTube (or other sites) stops working, first thing to try is updating the `yt-dlp` package:
 
 ```ps1
-# YouTube keeps changing its workings; first thing to try when YTPLDL fails is to update yt-dlp package
-.venv\Scripts\activate  # Run this line only if you run PLW in venv 
+# Run this line in the root folder of this project only if you chose Option B:
+.venv\Scripts\activate
+
+# Running this line will update the yt-dlp package
 pip install -U yt-dlp
 ```
 

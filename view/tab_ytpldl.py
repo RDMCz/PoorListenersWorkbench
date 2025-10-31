@@ -23,8 +23,6 @@ class TabYTPLDL(qtw.QWidget):
     def __init__(self):
         super().__init__()
 
-        stack_panel = qtw.QVBoxLayout()
-
         # .: Group 1 :: YouTube playlist URL :.
         group1 = qtw.QGroupBox("Step 1: Provide a YouTube playlist URL")
         group1layout = qtw.QHBoxLayout()
@@ -90,10 +88,10 @@ class TabYTPLDL(qtw.QWidget):
         group3.setLayout(group3layout)
         # .::.
 
+        stack_panel = qtw.QVBoxLayout()
         stack_panel.addWidget(group1)
         stack_panel.addWidget(group2)
         stack_panel.addWidget(group3)
-
         self.setLayout(stack_panel)
 
     def button_g1_clicked(self):
