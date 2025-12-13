@@ -76,7 +76,10 @@ def download_song_list(album_links: List[str]):
                 "key": "FFmpegMetadata",
             },
         ],
-        "outtmpl": "_download/bandcamp/%(artist)s/%(album)s/%(track_number)s - %(title)s.%(ext)s",
+        "postprocessor_args": [
+            "-metadata", "comment="  # Remove the comment
+        ],
+        "outtmpl": "_download/bandcamp/%(artist)s/%(album)s/%(track_number)02d - %(title)s.%(ext)s",
         "writethumbnail": True,
     }
 
