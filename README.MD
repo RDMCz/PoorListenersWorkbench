@@ -3,6 +3,7 @@
 * [What is this?](#what-is-this)
 * [Features](#features)
 * [Running on Windows](#running-on-windows)
+* [Troubleshooting](#troubleshooting)
 * [Dependencies](#dependencies)
 * [Law, Order, and Call to Action](#law-order-and-call-to-action)
 * [Changelog](#changelog)
@@ -37,10 +38,13 @@ Downloads MP3 files for given YouTube playlist URL. ID3v2 tags can be modified i
      * Run the app by right clicking `Run-In-Venv.ps1` and choosing _Run with PowerShell_
      * The first boot will be slow because it installs all the dependencies
 
+## Troubleshooting
+
 If downloading from YouTube (or other sites) stops working, first thing to try is updating the `yt-dlp` package:
 
 ```ps1
-# Run this line first in the root folder of this project only if you chose Option B (virtual environment):
+# Run this line first in the root folder of this project
+# only if you chose Option B (virtual environment):
 .venv\Scripts\activate
 
 # Running this line will update the yt-dlp package:
@@ -80,6 +84,14 @@ You could certainly compile a similar list of advantages of music streaming plat
 Maybe the time is now to become your own master! (At least when it comes to listening to music.)
 
 ## Changelog
+
+### 0.2.1
+
+* _Bandcamp DL_:
+  * Downloaded MP3s now don't have any comment tag
+  * File names of downloaded MP3s now have track number in `02d` format (two digits, zero padded)
+  * Added _(Un)check all_ button for checking/unchecking all the checkboxes in the album table
+  * Checkboxes are now centered in their table cell
 
 ### 0.2.0
 
