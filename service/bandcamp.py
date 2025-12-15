@@ -79,7 +79,7 @@ def download_song_list(album_links: List[str]):
         "postprocessor_args": [
             "-metadata", "comment="  # Remove the comment
         ],
-        "outtmpl": "_download/bandcamp/%(artist)s/%(album)s/%(track_number)02d - %(title)s.%(ext)s",
+        "outtmpl": "_download/bandcamp/%(artist)s/[%(release_date>%Y-%m-%d)s] %(album)s/%(track_number)02d - %(title)s.%(ext)s",
         "writethumbnail": True,
     }
 

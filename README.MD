@@ -85,6 +85,10 @@ Maybe the time is now to become your own master! (At least when it comes to list
 
 ## Changelog
 
+### 0.2.2
+
+* _Bandcamp DL_: Album folder names now start with [yyyy-mm-dd], so they're sorted by release date 
+
 ### 0.2.1
 
 * _Bandcamp DL_:

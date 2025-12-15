@@ -4,7 +4,7 @@ from view.tab_about import TabAbout
 from view.tab_bandcamp import TabBandcamp
 from view.tab_ytpldl import TabYTPLDL
 
-_VERSION = "0.2.1"
+_VERSION = "0.2.2"
 
 
 class MainWindow(qtw.QMainWindow):
